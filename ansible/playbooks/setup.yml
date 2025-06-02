@@ -1,0 +1,40 @@
+- name: Setup EC2 for Yii2 App
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install packages
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+          - nginx
+          - git
+          - php
+        update_cache: true
+
+    - name: Enable Docker
+      systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: Initialize Docker Swarm
+      shell: docker swarm init || true
+
+    - name: Copy NGINX reverse proxy config
+      copy:
+        src: ../../nginx/yii2-app.conf
+        dest: /etc/nginx/sites-available/yii2-app.conf
+
+    - name: Enable site
+      file:
+        src: /etc/nginx/sites-available/yii2-app.conf
+        dest: /etc/nginx/sites-enabled/yii2-app.conf
+        state: link
+        force: yes
+
+    - name: Restart NGINX
+      service:
+        name: nginx
+        state: restarted

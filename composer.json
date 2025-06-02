@@ -1,0 +1,23 @@
+{
+    "name": "yiisoft/yii2-app-basic",
+    "require": {
+        "php": ">=7.4.0",
+        "yiisoft/yii2": "~2.0.47"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "yii\\composer\\Installer::postInstall"
+        ],
+        "post-update-cmd": [
+            "yii\\composer\\Installer::postUpdate"
+        ]
+    },
+    "extra": {
+        "yii\\composer\\Installer::postInstall": "init"
+    }
+}
